@@ -91,9 +91,11 @@ public class UserManager implements UserOpertion {
 
     private boolean isValidAge(int age) {
 
-        return age > 0;
+        return age > 15;
     }
-
+    public void loadData(){
+        storage.loadUsers(users);
+    }   
     public void addUser() {
         System.out.println("Enter the username");
         String name = sc.nextLine();
