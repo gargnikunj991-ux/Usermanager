@@ -54,7 +54,7 @@ public class N {
         Scanner sc = new Scanner(System.in);
         UserManager manager = new UserManager();
 
-        manager.loadUsersFromFile();
+        manager.storage.loadUsers(manager.users);
         while (true) {
 
             System.out.println("1: Add user");

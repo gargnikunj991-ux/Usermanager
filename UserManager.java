@@ -7,18 +7,77 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Scanner;
 
- interface UserOpertion{
-   void addUser();
-   void deleteUser();
-   void displayUser();
-   void updateUser();
-   void searchUser();
-    
+interface UserStorage {
+
+    void saveUsers(HashMap<String, User> users);
+
+    void loadUsers(HashMap<String, User> users);
 }
+
+class FileStorage implements UserStorage {
+
+    public void saveUsers(HashMap<String, User> users) {
+        try {
+            FileWriter writer = new FileWriter("user.txt");
+            for (User user : users.values()) {
+                writer.write(user.getName() + "," + user.getAge() + "," + user.getEmail());
+                writer.write("\n");
+            }
+            writer.close();
+        } catch (IOException e) {
+            System.out.println("File cannot update");
+        }
+
+    }
+
+    public void loadUsers(HashMap<String, User> users) {
+        try {
+            File file = new File("user.txt");
+
+            if (!file.exists()) {
+
+                return;
+            }
+            BufferedReader reader
+                    = new BufferedReader(new FileReader("user.txt"));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] data = line.split(",");
+                String name = data[0].trim();
+                int age = Integer.parseInt(data[1].trim());
+                String email = data[2].trim();
+                User u1 = new User(name, age, email);
+                users.put(name, u1);
+            }
+
+            reader.close();
+        } catch (IOException e) {
+            System.out.println("error");
+        }
+
+    }
+
+}
+
+interface UserOpertion {
+
+    void addUser();
+
+    void deleteUser();
+
+    void displayUser();
+
+    void updateUser();
+
+    void searchUser();
+
+}
+
 public class UserManager implements UserOpertion {
 
     HashMap<String, User> users = new HashMap<>();
     Scanner sc = new Scanner(System.in);
+    FileStorage storage = new FileStorage();
 
     private boolean userExists(String name) {
 
@@ -65,50 +124,9 @@ public class UserManager implements UserOpertion {
             }
             User u1 = new User(name, age, email);
             users.put(name, u1);
-            saveUserstoFile();
+            storage.saveUsers(users);
             System.out.println("User is resgister");
         }
-    }
-
-    public void saveUserstoFile() {
-        try {
-            FileWriter writer = new FileWriter("user.txt");
-            for (User user : users.values()) {
-                writer.write(user.getName() + "," + user.getAge() + "," + user.getEmail());
-                writer.write("\n");
-            }
-            writer.close();
-        } catch (IOException e) {
-            System.out.println("File cannot update");
-        }
-
-    }
-
-    public void loadUsersFromFile() {
-        try {
-            File file = new File("user.txt");
-
-            if (!file.exists()) {
-
-                return;
-            }
-            BufferedReader reader
-                    = new BufferedReader(new FileReader("user.txt"));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] data = line.split(",");
-                String name = data[0].trim();
-                int age = Integer.parseInt(data[1].trim());
-                String email = data[2].trim();
-                User u1 = new User(name, age, email);
-                users.put(name, u1);
-            }
-
-            reader.close();
-        } catch (IOException e) {
-            System.out.println("error");
-        }
-
     }
 
     public void searchUser() {
@@ -143,7 +161,7 @@ public class UserManager implements UserOpertion {
         String remove = sc.nextLine();
         if (users.containsKey(remove)) {
             users.remove(remove);
-            saveUserstoFile();
+            storage.saveUsers(users);
             System.out.println("User is deleted");
         } else {
             System.out.println("User not found ");
@@ -162,7 +180,7 @@ public class UserManager implements UserOpertion {
             int newage = sc.nextInt();
             sc.nextLine();
             user.setAge(newage);
-            saveUserstoFile();
+            storage.saveUsers(users);
             System.out.println("email and age is updated ");
         } else {
             System.out.println("User is not found ");
