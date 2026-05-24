@@ -54,7 +54,9 @@ public class N {
         Scanner sc = new Scanner(System.in);
         UserManager manager = new UserManager();
 
-        manager.loadData();
+        manager.loadData(
+
+        );
         while (true) {
 
             System.out.println("1: Add user");
@@ -62,7 +64,8 @@ public class N {
             System.out.println("3: Delete user");
             System.out.println("4: Serach user");
             System.out.println("5: Update user email");
-            System.out.println("6: Exit");
+            System.out.println("6: Change your username");
+            System.out.println("7: Exit");
             int choice = sc.nextInt();
             sc.nextLine();
 
@@ -84,6 +87,9 @@ public class N {
                     manager.updateUser();
                     break;
                 case 6:
+                   manager.changeUsername();
+                break;
+                case 7:
                     System.out.println("Data saving");
                     System.out.println("Program is ending...");
                     return;

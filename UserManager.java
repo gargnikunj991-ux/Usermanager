@@ -59,7 +59,7 @@ class FileStorage implements UserStorage {
 
 }
 
-interface UserOpertion {
+interface UserOperation {
 
     void addUser();
 
@@ -70,14 +70,15 @@ interface UserOpertion {
     void updateUser();
 
     void searchUser();
+    void  changeUsername();
 
 }
 
-public class UserManager implements UserOpertion {
+public class UserManager implements UserOperation {
 
     HashMap<String, User> users = new HashMap<>();
     Scanner sc = new Scanner(System.in);
-    FileStorage storage = new FileStorage();
+    UserStorage storage = new FileStorage();
 
     private boolean userExists(String name) {
 
@@ -176,16 +177,44 @@ public class UserManager implements UserOpertion {
         if (users.containsKey(update)) {
             System.out.println("Enter your email ");
             String newemail = sc.nextLine();
+            while(!isValidEmail(newemail)){
+                System.out.println("Invalid email");
+                System.out.println("Reenter the email");
+                newemail = sc.nextLine();
+            }
             User user = users.get(update);
             user.setEmail(newemail);
             System.out.println("Enter your age");
             int newage = sc.nextInt();
             sc.nextLine();
+            while(!isValidAge(newage)){
+                System.out.println("Age  is invalid");
+                System.out.println("Enter age");
+                newage = sc.nextInt();
+                sc.nextLine(); 
+            }
             user.setAge(newage);
             storage.saveUsers(users);
             System.out.println("email and age is updated ");
         } else {
             System.out.println("User is not found ");
         }
+    }
+    public void changeUsername(){
+       System.out.println("Enter the username");
+       String username = sc.nextLine();
+       if(userExists(username)){
+        System.out.println("Enter the new username");
+        String newusername =sc.nextLine();
+        if(userExists(newusername)){
+           System.out.println("Username already exist "); 
+        }else{
+        User user = users.remove(username);
+        user.setName(newusername);
+        users.put(newusername, user);
+        System.out.println("Username is updated");
+        storage.saveUsers(users);
+        }
+       }
     }
 }
