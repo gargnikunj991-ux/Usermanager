@@ -6,14 +6,15 @@ class User {
     private String name;
     private int age;
     private String email;
+    private String password;
 
-    public User(String name, int age, String email) {
+    public User(String name, int age, String email, String password) {
         this.name = name;
         if (age > 0) {
             this.age = age;
         }
         this.email = email;
-
+        this.password = password;
     }
 
     public String getName() {
@@ -46,6 +47,13 @@ class User {
         return "Name:" + name + ", Age:" + age + ", Email:" + email;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
 
 public class N {
@@ -54,9 +62,7 @@ public class N {
         Scanner sc = new Scanner(System.in);
         UserManager manager = new UserManager();
 
-        manager.loadData(
-
-        );
+        manager.loadData();
         while (true) {
 
             System.out.println("1: Add user");
@@ -65,7 +71,8 @@ public class N {
             System.out.println("4: Serach user");
             System.out.println("5: Update user email");
             System.out.println("6: Change your username");
-            System.out.println("7: Exit");
+            System.out.println("7: Login");
+            System.out.println("8: Exit");
             int choice = sc.nextInt();
             sc.nextLine();
 
@@ -87,9 +94,12 @@ public class N {
                     manager.updateUser();
                     break;
                 case 6:
-                   manager.changeUsername();
-                break;
+                    manager.changeUsername();
+                    break;
                 case 7:
+                manager.login();
+                break;
+                case 8:
                     System.out.println("Data saving");
                     System.out.println("Program is ending...");
                     return;

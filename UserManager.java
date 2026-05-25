@@ -20,7 +20,7 @@ class FileStorage implements UserStorage {
         try {
             FileWriter writer = new FileWriter("user.txt");
             for (User user : users.values()) {
-                writer.write(user.getName() + "," + user.getAge() + "," + user.getEmail());
+                writer.write(user.getName() + "," + user.getAge() + "," + user.getEmail()+","+user.getPassword());
                 writer.write("\n");
             }
             writer.close();
@@ -46,7 +46,8 @@ class FileStorage implements UserStorage {
                 String name = data[0].trim();
                 int age = Integer.parseInt(data[1].trim());
                 String email = data[2].trim();
-                User u1 = new User(name, age, email);
+                String   password = data[3].trim();
+                User u1 = new User(name, age, email, password);
                 users.put(name, u1);
             }
 
@@ -94,9 +95,29 @@ public class UserManager implements UserOperation {
 
         return age > 15;
     }
+    private  boolean  isValidPassword(String password){
+        return password.length()<8;
+    }
     public void loadData(){
         storage.loadUsers(users);
     }   
+    public  void login(){
+        System.out.println("Enter username ");
+        String username= sc.nextLine();
+        if (userExists(username)) {
+             System.out.println("Enter password");
+             String password = sc.nextLine();
+             User user = users.get(username);
+               if (user.getPassword().equals(password)) {
+                System.out.println("login successful");
+               }else{
+                System.out.println("Wrong password");
+               }
+        }else{
+            System.out.println("User not found ");
+            return;
+        }
+    }
     public void addUser() {
         System.out.println("Enter the username");
         String name = sc.nextLine();
@@ -125,7 +146,13 @@ public class UserManager implements UserOperation {
                 System.out.println("Reenter the email");
                 email = sc.nextLine();
             }
-            User u1 = new User(name, age, email);
+            System.out.println("Enter your password");
+            String password= sc.nextLine();
+            while (isValidPassword(password)) { 
+                System.out.println("Passwor is to short");
+                password =sc.nextLine();
+            }
+            User u1 = new User(name, age, email,password);
             users.put(name, u1);
             storage.saveUsers(users);
             System.out.println("User is resgister");
