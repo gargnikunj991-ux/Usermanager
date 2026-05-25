@@ -80,7 +80,7 @@ public class UserManager implements UserOperation {
     HashMap<String, User> users = new HashMap<>();
     Scanner sc = new Scanner(System.in);
     UserStorage storage = new FileStorage();
-
+    private  User currentUser;
     private boolean userExists(String name) {
 
         return users.containsKey(name);
@@ -95,13 +95,14 @@ public class UserManager implements UserOperation {
 
         return age > 15;
     }
-    private  boolean  isValidPassword(String password){
+    private  boolean  isWeakPassword(String password){
         return password.length()<8;
     }
     public void loadData(){
         storage.loadUsers(users);
     }   
     public  void login(){
+        if (currentUser== null) {
         System.out.println("Enter username ");
         String username= sc.nextLine();
         if (userExists(username)) {
@@ -109,6 +110,8 @@ public class UserManager implements UserOperation {
              String password = sc.nextLine();
              User user = users.get(username);
                if (user.getPassword().equals(password)) {
+                 currentUser = user;
+                System.out.println("Welcome "+ currentUser.getName());
                 System.out.println("login successful");
                }else{
                 System.out.println("Wrong password");
@@ -116,6 +119,25 @@ public class UserManager implements UserOperation {
         }else{
             System.out.println("User not found ");
             return;
+        }
+    }else{
+        System.out.println(currentUser.getName()+" is already loggin");
+    }
+}
+    public void logout(){    
+        if ( currentUser == null) {
+          System.out.println("No user is logged in");
+        }else{
+            currentUser = null;
+            System.out.println("User is logout");  
+        }
+         
+    }
+    public void loginStatus(){
+        if (currentUser==null) {
+            System.out.println("No user logged in");
+        }else{
+            System.out.println(currentUser.getName()+" is  logged in");
         }
     }
     public void addUser() {
@@ -148,7 +170,7 @@ public class UserManager implements UserOperation {
             }
             System.out.println("Enter your password");
             String password= sc.nextLine();
-            while (isValidPassword(password)) { 
+            while (isWeakPassword(password)) { 
                 System.out.println("Passwor is to short");
                 password =sc.nextLine();
             }

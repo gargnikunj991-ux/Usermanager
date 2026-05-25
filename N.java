@@ -72,7 +72,9 @@ public class N {
             System.out.println("5: Update user email");
             System.out.println("6: Change your username");
             System.out.println("7: Login");
-            System.out.println("8: Exit");
+            System.out.println("8: Logout the user");   
+            System.out.println("9: Check login status"); 
+            System.out.println("10: Exit");
             int choice = sc.nextInt();
             sc.nextLine();
 
@@ -100,6 +102,12 @@ public class N {
                 manager.login();
                 break;
                 case 8:
+                manager.logout();
+                break;
+                case 9:
+                manager.loginStatus();
+                break;
+                case 10:
                     System.out.println("Data saving");
                     System.out.println("Program is ending...");
                     return;
