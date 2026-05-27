@@ -102,12 +102,21 @@ public class UserManager implements UserOperation {
         return password.length() < 8;
     }
 
+     private boolean isLoggedIn(){
+      if (currentUser ==null) {
+        System.out.println("Please login first ");
+        return false;
+      }else{
+        return true;
+      }
+     }
+
     public void loadData() {
         storage.loadUsers(users);
     }
 
     public void login() {
-        if (currentUser == null) {
+        if (currentUser ==null) {
             System.out.println("Enter username ");
             String username = sc.nextLine();
             if (userExists(username)) {
@@ -131,7 +140,7 @@ public class UserManager implements UserOperation {
     }
 
     public void logout() {
-        if (currentUser == null) {
+        if (!isLoggedIn()) {
             System.out.println("No user is logged in");
         } else {
             currentUser = null;
@@ -141,7 +150,7 @@ public class UserManager implements UserOperation {
     }
 
     public void loginStatus() {
-        if (currentUser == null) {
+        if (!isLoggedIn()) {
             System.out.println("No user logged in");
         } else {
             System.out.println(currentUser.getName() + " is  logged in");
@@ -190,6 +199,9 @@ public class UserManager implements UserOperation {
     }
 
     public void searchUser() {
+        if (!isLoggedIn()) {
+            return;
+        }else{
         System.out.println("Enter username to serach");
         String serach = sc.nextLine();
 
@@ -201,6 +213,7 @@ public class UserManager implements UserOperation {
             System.out.println("User not found ");
         }
     }
+}
 
     public void displayUser() {
         if (users.isEmpty()) {
@@ -215,15 +228,14 @@ public class UserManager implements UserOperation {
     }
 
     public void deleteUser() {
-        if (currentUser == null) {
-            System.out.println("Please login");
+        if (!isLoggedIn()) {
+            return;
         } else {
-            System.out.println("Enter the username");
-            String remove = sc.nextLine();
-            if (users.containsKey(remove)) {
-                users.remove(remove);
+            if (users.containsKey(currentUser.getName())) {
+                users.remove(currentUser.getName());
                 storage.saveUsers(users);
-                System.out.println("User is deleted");
+                currentUser = null;
+                System.out.println("Account is deleted");
             } else {
                 System.out.println("User not found ");
             }
@@ -231,9 +243,9 @@ public class UserManager implements UserOperation {
     }
 
     public void updateUser() {
-        System.out.println("Enter the username");
-        String update = sc.nextLine();
-        if (users.containsKey(update)) {
+      if(!isLoggedIn()) {
+      }else{
+        if (users.containsKey(currentUser.getName())) {
             System.out.println("Enter your email ");
             String newemail = sc.nextLine();
             while (!isValidEmail(newemail)) {
@@ -241,7 +253,7 @@ public class UserManager implements UserOperation {
                 System.out.println("Reenter the email");
                 newemail = sc.nextLine();
             }
-            User user = users.get(update);
+            User user = users.get(currentUser.getName());
             user.setEmail(newemail);
             System.out.println("Enter your age");
             int newage = sc.nextInt();
@@ -259,22 +271,25 @@ public class UserManager implements UserOperation {
             System.out.println("User is not found ");
         }
     }
-
+    }
     public void changeUsername() {
-        System.out.println("Enter the username");
-        String username = sc.nextLine();
-        if (userExists(username)) {
+        if (!isLoggedIn()) {
+            return;
+        }else{
+        if (userExists(currentUser.getName())) {
             System.out.println("Enter the new username");
             String newusername = sc.nextLine();
             if (userExists(newusername)) {
                 System.out.println("Username already exist ");
             } else {
-                User user = users.remove(username);
+                User user = users.remove(currentUser.getName());
                 user.setName(newusername);
+                currentUser = user;
                 users.put(newusername, user);
                 System.out.println("Username is updated");
                 storage.saveUsers(users);
             }
         }
     }
+}
 }
