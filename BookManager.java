@@ -1,0 +1,70 @@
+
+import java.util.HashMap;
+import java.util.Scanner;
+interface BookOperation{
+    void addBook();
+    void serachBook();
+    void displayBook();
+}
+
+public class BookManager implements BookOperation {
+    Scanner sc = new Scanner(System.in);
+    HashMap<String , Book> books = new HashMap<>();
+    
+   public void addBook(){
+      System.out.println("Enter the title of book");
+      String title = sc.nextLine();
+      while(title.isEmpty()){
+        System.out.println("The title is book is worng ");
+        System.out.println("Renter the title");
+        title = sc.nextLine();
+      }
+      System.out.println("Enter the name of author");
+      String author = sc.nextLine();
+      while(author.isEmpty()){
+        System.out.println("The name of auhtor of book is wrong");
+        System.out.println("Enter the name again");
+        author = sc.nextLine();
+      }
+      System.out.println("Enter the BookId of the book ");
+      String bookId= sc.nextLine();
+      while(bookId.isEmpty()){
+        System.out.println("BookId is wrong ");
+        bookId = sc.nextLine();
+      }
+      while(books.containsKey(bookId)){
+        System.out.println("BookId already exist ");
+        bookId = sc.nextLine();
+      }
+         Book book = new Book(title, author, bookId);
+          books.put(bookId, book);
+         System.out.println("Book is succesfully added ");
+   }
+   public void serachBook(){
+       System.out.println("Enter the title of the book");
+       String title  = sc.nextLine();
+       boolean found = false;
+       for(Book book : books.values()){
+        if (book.getTitle().equals(title)) {
+          found = true;
+          System.out.println(book.getTitle());
+          System.out.println("BY:"+book.getAuthor());
+        }
+       }
+       if (!found) {
+        System.out.println("book not found ");
+       }
+   }
+   public void displayBook(){
+       if (books.isEmpty()) {
+        System.out.println("There is no Book in system ");
+       }else{
+        for(Book book:books.values()){
+          System.out.println("Title:"+book.getTitle());
+          System.out.println("Author:"+book.getAuthor());
+          System.out.println("BookId:"+book.getBookId());
+          System.out.println("Available:"+book.getAvailable());
+        }
+       }
+   }
+}

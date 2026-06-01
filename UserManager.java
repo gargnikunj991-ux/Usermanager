@@ -150,7 +150,7 @@ public class UserManager implements UserOperation {
     }
 
     public void loginStatus() {
-        if (!isLoggedIn()) {
+        if (currentUser == null) {
             System.out.println("No user logged in");
         } else {
             System.out.println(currentUser.getName() + " is  logged in");
