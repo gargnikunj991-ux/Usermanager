@@ -4,6 +4,7 @@ public class Book {
     private String bookId;
     private boolean available;
     private String borrowedBy;
+    private String issuedBy;
 
     public Book(String title, String author, String bookId) {
         this.title = title;
@@ -11,6 +12,7 @@ public class Book {
         this.bookId = bookId;
         this.available = true;
         this.borrowedBy = null;
+        this.issuedBy = null;
     }
 
    public  String getTitle(){
@@ -43,7 +45,13 @@ public class Book {
    public void setBorrowedby(String borrowedby){
       this.borrowedBy = borrowedby;
    }
+   public String getIssuedby(){
+    return issuedBy;
+   }
+   public void setIssuedby(String  issuedby){
+    this.issuedBy = issuedby;
+   }
    public String toString(){
-    return "Title:"+title+" Author:"+author+" BookId:"+bookId+" Available:"+available+" BorrowedBy:"+borrowedBy;
+    return "Title:"+title+" Author:"+author+" BookId:"+bookId+" Available:"+available+" BorrowedBy:"+borrowedBy+" IssuedBy:"+issuedBy;
    }
 }

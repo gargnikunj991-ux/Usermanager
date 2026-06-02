@@ -5,12 +5,18 @@ interface BookOperation{
     void addBook();
     void serachBook();
     void displayBook();
+    void borrowBook();
 }
 
 public class BookManager implements BookOperation {
     Scanner sc = new Scanner(System.in);
     HashMap<String , Book> books = new HashMap<>();
+    private UserManager userManager;
+    public BookManager(UserManager userManager){
+      this.userManager = userManager;
+    }
     
+
    public void addBook(){
       System.out.println("Enter the title of book");
       String title = sc.nextLine();
@@ -66,5 +72,14 @@ public class BookManager implements BookOperation {
           System.out.println("Available:"+book.getAvailable());
         }
        }
+   }
+   public void borrowBook(){
+    userManager.getCurrentUser();
+    if(userManager.getCurrentUser() == null){
+      System.out.println("Please login first");
+    }else{
+      System.out.println("Enter the custmor username");
+    }
+
    }
 }

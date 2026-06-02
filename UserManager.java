@@ -82,6 +82,12 @@ public class UserManager implements UserOperation {
     Scanner sc = new Scanner(System.in);
     UserStorage storage = new FileStorage();
     private User currentUser;
+    public User getCurrentUser(){
+        return currentUser;
+    }
+    public boolean userExistsPublic(String name) {
+    return userExists(name);
+}
 
     private boolean userExists(String name) {
 
