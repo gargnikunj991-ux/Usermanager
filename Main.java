@@ -2,12 +2,14 @@
 import java.util.Scanner;
 
 
-public class N {
+public class Main {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         UserManager manager = new UserManager();
+        MemberManager memberManager = new MemberManager();
 
+      BookManager bookManager = new BookManager(manager, memberManager);
         manager.loadData();
         while (true) {
 
@@ -59,6 +61,9 @@ public class N {
                     System.out.println("Data saving");
                     System.out.println("Program is ending...");
                     return;
+                case 11:
+                bookManager.borrowBook();
+                 break;    
                 default:
                     return;
             }

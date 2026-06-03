@@ -12,8 +12,10 @@ public class BookManager implements BookOperation {
     Scanner sc = new Scanner(System.in);
     HashMap<String , Book> books = new HashMap<>();
     private UserManager userManager;
-    public BookManager(UserManager userManager){
+    private MemberManager memberManager;
+    public BookManager(UserManager userManager,MemberManager memberManager){
       this.userManager = userManager;
+      this.memberManager = memberManager;
     }
     
 
@@ -77,9 +79,29 @@ public class BookManager implements BookOperation {
     userManager.getCurrentUser();
     if(userManager.getCurrentUser() == null){
       System.out.println("Please login first");
-    }else{
-      System.out.println("Enter the custmor username");
+      return;
     }
+    System.out.println("Enter memberId");
+    String memberId= sc.nextLine();
+   if (!memberManager.memberExists(memberId)) {
+    System.out.println("Member does not exist");
+    return;
+    }
+   System.out.println("Enter BookId");
+   String bookId = sc.nextLine();
+   if (!books.containsKey(bookId)) {
+     System.out.println("Book does not exist");
+     return ;
+   }
+   Book book = books.get(bookId);
+   if (!book.getAvailable()) {
+    System.out.println("Book is already Borrowed");
+    return;
+   }
+   book.setAvailable(false);
+   book.setBorrowedby(memberId);
+   book.setIssuedby(userManager.getCurrentUser().getName());
 
+   System.out.println("Book is succesfully borrowed");
    }
 }

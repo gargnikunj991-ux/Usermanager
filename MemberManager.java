@@ -9,7 +9,9 @@ interface MemberOperation{
 public class MemberManager implements  MemberOperation{
     HashMap<String, Member> members = new HashMap<>();
     Scanner sc = new Scanner(System.in);
-
+   public boolean memberExists(String memberId){
+    return members.containsKey(memberId);
+}
    public void addMember(){
      System.out.println("Enter the member name");
      String memberName = sc.nextLine();
