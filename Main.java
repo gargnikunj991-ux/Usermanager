@@ -3,7 +3,51 @@ import java.util.Scanner;
 
 
 public class Main {
+     public static void showMainMenu() {
+    System.out.println("=== Library Management System ===");
+    System.out.println("1: Authentication");
+    System.out.println("2: Employee Management");
+    System.out.println("3: Member Management");
+    System.out.println("4: Book Management");
+    System.out.println("5: Library Operations");
+    System.out.println("6: Exit"); 
+    }
 
+    public static void showAuthenticationMenu() {
+    System.out.println("=== Authentication ===");
+    System.out.println("1: Login");
+    System.out.println("2: Logout");
+    System.out.println("3: Login Status");
+    System.out.println("4: Back");  
+    } 
+
+    public static void showEmployeeMenu(){
+       System.out.println("=== Employee Management ===");
+       System.out.println("1: Add user");
+       System.out.println("2: Search user");
+       System.out.println("3: Display user");
+       System.out.println("4: Update user");
+       System.out.println("5: Change username");
+       System.out.println("6: Delete user");
+       System.out.println("7: Back");
+    }
+    
+    public static void showMemberManagementMenu(){
+        System.out.println("=== Member Management ===");
+        System.out.println("1: Add member ");
+        System.out.println("2: Search member");
+        System.out.println("3: Display member");
+        System.out.println("4: Back");
+    }
+
+    public static void showBookManagementMenu(){
+        System.out.println("=== Book Management ===");
+        System.out.println("1: Add book");
+        System.out.println("2: Search book");
+        System.out.println("3: Display book");
+        System.out.println("4: Back ");           
+    }
+ 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         UserManager manager = new UserManager();
@@ -11,63 +55,131 @@ public class Main {
 
       BookManager bookManager = new BookManager(manager, memberManager);
         manager.loadData();
-        while (true) {
+        memberManager.loadData();
+        while(true){
+        showMainMenu();
 
-           System.out.println("=== Authentication ===");
-           System.out.println("1 Login");
-           System.out.println("2 Logout");
-           System.out.println("3 Login status ");
+       int choice = sc.nextInt();
+      sc.nextLine();
 
-           System.out.println("=== Account ===");
-           System.out.println("4 Add User");
-           System.out.println("5 Update User");
-           System.out.println("6 Serach user");
-           System.out.println("7 Display users");
-           System.out.println("8 Delete user");
-           System.out.println("9 Change username");
-           System.out.println("10 Exit");
-            int choice = sc.nextInt();
-            sc.nextLine();
+        switch(choice){
+            case 1:
+            boolean authmenu = true;
+          while(authmenu){
+                showAuthenticationMenu();
 
-            switch (choice) {                
-                case 1:
+               int authChoice = sc.nextInt();
+              sc.nextLine();
+
+               switch(authChoice){
+               case 1:
                 manager.login();
                 break;
-                case 2:
+
+               case 2:
                 manager.logout();
-                break;    
-                case 3:
+                break;
+
+               case 3:
                 manager.loginStatus();
                 break;
-                case 4:
-                    manager.addUser();
-                    break;
-                case 5:
-                    manager.updateUser();
-                    break;
-                case 6:
-                    manager.searchUser();
-                    break;
-                case 7:
-                    manager.displayUser();
-                    break;
-                case 8:
-                    manager.deleteUser();
-                    break;
-                case 9:
-                    manager.changeUsername();
-                    break;
-                case 10:
-                    System.out.println("Data saving");
-                    System.out.println("Program is ending...");
-                    return;
-                case 11:
-                bookManager.borrowBook();
-                 break;    
-                default:
-                    return;
+
+               case 4:
+               authmenu = false;
+                break; // Back
             }
         }
+        break;
 
+            case 2:
+            boolean employ = true;
+            while(employ){
+                showEmployeeMenu();
+                int employchoice =sc.nextInt();
+                sc.nextLine();
+                switch (employchoice) {
+                    case 1:
+                        manager.addUser();
+                        break;
+                    case 2:
+                        manager.searchUser();
+                        break;
+                    case 3:
+                        manager.displayUser();
+                        break;
+                    case 4:
+                        manager.updateUser();
+                        break;
+                    case 5:
+                        manager.changeUsername();
+                        break;
+                    case 6:
+                        manager.deleteUser();
+                        break;
+                    case 7:
+                        employ = false;
+                        break;            
+                
+                    default:
+                        break;
+                }
+            }
+            break;
+            
+            case 3:
+             boolean member = true;
+             while(member){
+                showMemberManagementMenu();
+                int memberchoice = sc.nextInt();
+                sc.nextLine();
+                switch (memberchoice) {
+                    case 1:
+                        memberManager.addMember();
+                        break;
+                    case 2:
+                        memberManager.searchMember();
+                        break;
+                    case 3:
+                        memberManager.displayMember();
+                        break;
+                    case 4:
+                         member = false;
+                         break;
+                    default:
+                        break;
+                }
+             }
+              break;
+
+            case 4:
+             boolean book= true;
+             while(book){ 
+             showBookManagementMenu();
+
+              int bookchoice =sc.nextInt();
+              sc.nextLine();
+              switch(bookchoice){
+                case 1:
+                bookManager.addBook();
+                break;
+                case 2:
+                bookManager.serachBook();
+                break;
+                case 3:
+                bookManager.displayBook();
+                break;
+                case 4:
+                book = false;
+                break;
+
+              }
+            }
+            break;
+            case 5:
+            break;
+            case 6:
+            return;
+    }
+}
     }
 }
