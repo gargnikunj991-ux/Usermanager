@@ -47,6 +47,14 @@ public class Main {
         System.out.println("3: Display book");
         System.out.println("4: Back ");           
     }
+
+    public static void showLibraryOperationMenu(){
+        System.out.println("=== Library Operstion");
+        System.out.println("1: Borrow Book");
+        System.out.println("2: Return Book");
+        System.out.println("3: Display Borrow Book");
+        System.out.println("4: Back");
+    }
  
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
@@ -176,6 +184,31 @@ public class Main {
             }
             break;
             case 5:
+            boolean library =true;
+            while (library) {
+            showLibraryOperationMenu();
+
+               int librarycho= sc.nextInt();
+               sc.nextLine();
+               switch (librarycho) {
+                case 1:
+                    bookManager.borrowBook();
+                    break;
+                case 2:
+                   System.out.println("Feature is coming soon");
+                break;
+                case 3:
+                  System.out.println("Feature is coming soon");
+                break;
+
+                case 4:
+                 library = false;
+                 break;
+                default:
+                    break;
+               }
+
+            }
             break;
             case 6:
             return;
