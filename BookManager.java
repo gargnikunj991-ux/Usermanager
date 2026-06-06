@@ -1,6 +1,74 @@
-
 import java.util.HashMap;
 import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
+interface BookStorage {
+
+    void saveBooks(HashMap<String, Book> books);
+
+    void loadBooks(HashMap<String, Book> books);
+}
+class BookFileStorage implements BookStorage {
+
+    public void saveBooks(HashMap<String, Book> books) {
+        try {
+            FileWriter writer = new FileWriter("books.txt");
+            for (Book book : books.values()) {
+                writer.write(book.getTitle() + "," +book.getAuthor() + "," + book.getBookId() + "," +book.getAvailable()+","+book.getBorrowedby()+","+book.getIssuedby());
+                writer.write("\n");
+            }
+            writer.close();
+        } catch (IOException e) {
+            System.out.println("File cannot update");
+        }
+
+    }
+
+    public void loadBooks(HashMap<String, Book> Books) {
+        try {
+            File file = new File("books.txt");
+
+            if (!file.exists()) {
+
+                return;
+            }
+            BufferedReader reader
+                    = new BufferedReader(new FileReader("books.txt"));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] data = line.split(",");
+
+                 String title = data[0].trim();
+                 String author = data[1].trim();
+                 String bookId = data[2].trim();
+
+                 boolean available = Boolean.parseBoolean(data[3].trim());
+
+                 String borrowedBy = data[4].trim();
+                 String issuedBy = data[5].trim();
+
+                 Book book = new Book(title, author, bookId);
+
+                 book.setAvailable(available);
+                 book.setBorrowedby(borrowedBy);
+                 book.setIssuedby(issuedBy);
+ 
+                 Books.put(bookId, book);
+            }
+
+            reader.close();
+        } catch (IOException e) {
+            System.out.println("error");
+        }
+
+    }
+
+}
+
 interface BookOperation{
     void addBook();
     void serachBook();
@@ -19,7 +87,10 @@ public class BookManager implements BookOperation {
       this.userManager = userManager;
       this.memberManager = memberManager;
     }
-    
+    BookStorage storage = new BookFileStorage();
+    public void loadData(){
+      storage.loadBooks(books);
+    }     
 
    public void addBook(){
       System.out.println("Enter the title of book");
@@ -48,7 +119,8 @@ public class BookManager implements BookOperation {
       }
          Book book = new Book(title, author, bookId);
           books.put(bookId, book);
-         System.out.println("Book is succesfully added ");
+          storage.saveBooks(books);
+         System.out.println("Book is succesfully added ");        
    }
    public void serachBook(){
        System.out.println("Enter the title of the book");
@@ -64,6 +136,7 @@ public class BookManager implements BookOperation {
        if (!found) {
         System.out.println("book not found ");
        }
+
    }
    public void displayBook(){
        if (books.isEmpty()) {
@@ -109,6 +182,7 @@ public class BookManager implements BookOperation {
    book.setBorrowedby(memberId);
    book.setIssuedby(userManager.getCurrentUser().getName());
 
+   storage.saveBooks(books);
    System.out.println("Book is succesfully borrowed");
    }
    public void returnBook(){
@@ -126,6 +200,7 @@ public class BookManager implements BookOperation {
    book.setAvailable(true);
    book.setBorrowedby(null);
    book.setIssuedby(null);
+   storage.saveBooks(books);
    System.out.println("Book is succesfully return");
    }
    public void displayBorrowBook(){

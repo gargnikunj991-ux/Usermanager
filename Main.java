@@ -64,6 +64,7 @@ public class Main {
       BookManager bookManager = new BookManager(manager, memberManager);
         manager.loadData();
         memberManager.loadData();
+        bookManager.loadData();
         while(true){
         showMainMenu();
 
