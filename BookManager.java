@@ -6,6 +6,8 @@ interface BookOperation{
     void serachBook();
     void displayBook();
     void borrowBook();
+    void returnBook();
+    void displayBorrowBook();
 }
 
 public class BookManager implements BookOperation {
@@ -68,10 +70,15 @@ public class BookManager implements BookOperation {
         System.out.println("There is no Book in system ");
        }else{
         for(Book book:books.values()){
+
+          System.out.println("-------------------------");
           System.out.println("Title:"+book.getTitle());
           System.out.println("Author:"+book.getAuthor());
           System.out.println("BookId:"+book.getBookId());
           System.out.println("Available:"+book.getAvailable());
+          System.out.println("BorrowedBy:"+book.getBorrowedby());
+          System.out.println("IssuedBy:"+book.getIssuedby());
+          System.out.println("-------------------------");
         }
        }
    }
@@ -103,5 +110,35 @@ public class BookManager implements BookOperation {
    book.setIssuedby(userManager.getCurrentUser().getName());
 
    System.out.println("Book is succesfully borrowed");
+   }
+   public void returnBook(){
+    System.out.println("Enter the BookId");
+    String bookId = sc.nextLine();
+    if(!books.containsKey(bookId)){
+      System.out.println("Books does not exist");
+      return;
+    }
+     Book book = books.get(bookId);
+   if(book.getAvailable()){
+      System.out.println(" book was never borrowed");
+      return;   
+   } 
+   book.setAvailable(true);
+   book.setBorrowedby(null);
+   book.setIssuedby(null);
+   System.out.println("Book is succesfully return");
+   }
+   public void displayBorrowBook(){
+    for(Book book : books.values()){
+      if(!book.getAvailable()){
+          System.out.println("-------------------------");
+          System.out.println("Title:"+book.getTitle());
+          System.out.println("Author:"+book.getAuthor());
+          System.out.println("BookId:"+book.getBookId());
+          System.out.println("BorrowedBy:"+book.getBorrowedby());
+          System.out.println("IssuedBy:"+book.getIssuedby());
+          System.out.println("-------------------------");
+      }
+    }
    }
 }

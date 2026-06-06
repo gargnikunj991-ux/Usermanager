@@ -195,10 +195,10 @@ public class Main {
                     bookManager.borrowBook();
                     break;
                 case 2:
-                   System.out.println("Feature is coming soon");
+                   bookManager.returnBook();
                 break;
                 case 3:
-                  System.out.println("Feature is coming soon");
+                  bookManager.displayBorrowBook();
                 break;
 
                 case 4:
