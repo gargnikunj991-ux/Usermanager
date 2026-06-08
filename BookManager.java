@@ -76,6 +76,7 @@ interface BookOperation{
     void borrowBook();
     void returnBook();
     void displayBorrowBook();
+    void displayAvailableBook();
 }
 
 public class BookManager implements BookOperation {
@@ -93,6 +94,11 @@ public class BookManager implements BookOperation {
     }     
 
    public void addBook(){
+     userManager.getCurrentUser();
+    if(userManager.getCurrentUser() == null){
+      System.out.println("Please login first");
+      return;
+    }
       System.out.println("Enter the title of book");
       String title = sc.nextLine();
       while(title.isEmpty()){
@@ -186,6 +192,11 @@ public class BookManager implements BookOperation {
    System.out.println("Book is succesfully borrowed");
    }
    public void returnBook(){
+     userManager.getCurrentUser();
+    if(userManager.getCurrentUser() == null){
+      System.out.println("Please login first");
+      return;
+    }
     System.out.println("Enter the BookId");
     String bookId = sc.nextLine();
     if(!books.containsKey(bookId)){
@@ -212,6 +223,17 @@ public class BookManager implements BookOperation {
           System.out.println("BookId:"+book.getBookId());
           System.out.println("BorrowedBy:"+book.getBorrowedby());
           System.out.println("IssuedBy:"+book.getIssuedby());
+          System.out.println("-------------------------");
+      }
+    }
+   }
+   public void displayAvailableBook(){
+    for(Book book : books.values()){
+      if(book.getAvailable()){
+          System.out.println("-------------------------");
+          System.out.println("Title:"+book.getTitle());
+          System.out.println("Author:"+book.getAuthor());
+          System.out.println("BookId:"+book.getBookId());
           System.out.println("-------------------------");
       }
     }

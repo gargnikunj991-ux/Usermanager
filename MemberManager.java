@@ -1,6 +1,5 @@
 import java.util.HashMap;
 import java.util.Scanner;
-import java.io.File;
 import  java.io.*;
 
 
@@ -68,8 +67,14 @@ public class MemberManager implements  MemberOperation{
    public boolean memberExists(String memberId){
     return members.containsKey(memberId);
 }
+private UserManager userManager;
 
    public void addMember(){
+     userManager.getCurrentUser();
+    if(userManager.getCurrentUser() == null){
+      System.out.println("Please login first");
+      return;
+    }
      System.out.println("Enter the member name");
      String memberName = sc.nextLine();
      while(memberName.isEmpty()){

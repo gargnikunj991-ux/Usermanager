@@ -53,7 +53,8 @@ public class Main {
         System.out.println("1: Borrow Book");
         System.out.println("2: Return Book");
         System.out.println("3: Display Borrow Book");
-        System.out.println("4: Back");
+        System.out.println("4: Display Available Book");
+        System.out.println("5: Back");
     }
  
     public static void main(String[] args) {
@@ -201,8 +202,10 @@ public class Main {
                 case 3:
                   bookManager.displayBorrowBook();
                 break;
-
                 case 4:
+                   bookManager.displayAvailableBook();
+                break;   
+                case 5:
                  library = false;
                  break;
                 default:
