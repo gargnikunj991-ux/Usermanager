@@ -1,3 +1,4 @@
+package model; 
 public class Member{
     private String memberName;
     private String memberId;
@@ -10,13 +11,13 @@ public class Member{
     public String getMemberName(){
         return memberName;
     }
-    public void setMemberName(){
+    public void setMemberName(String memberName){
         this.memberName =memberName;
     }
     public String getMemberId(){
         return memberId;
     }
-    public void setMemberId(){
+    public void setMemberId(String memberId){
         this.memberId = memberId;
     } 
     public String toString(){

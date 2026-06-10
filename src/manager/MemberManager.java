@@ -1,3 +1,5 @@
+package manager;
+import model.Member;
 import java.util.HashMap;
 import java.util.Scanner;
 import  java.io.*;

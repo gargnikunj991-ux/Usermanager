@@ -1,3 +1,5 @@
+package manager;
+import model.Book;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.io.BufferedReader;

@@ -1,0 +1,30 @@
+# Java
+
+*.class
+
+# VS Code
+
+.vscode/
+
+# Logs
+
+*.log
+
+# PostgreSQL JDBC Driver
+
+lib/*.jar
+
+# Build folders
+
+bin/
+out/
+target/
+
+# OS files
+
+.DS_Store
+Thumbs.db
+
+# Environment files
+
+.env
