@@ -2,11 +2,16 @@ package manager;
 import model.Book;
 import java.util.HashMap;
 import java.util.Scanner;
+
+import database.BookDAO;
+import database.DatabaseConnection;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Connection;
 
 interface BookStorage {
 
@@ -89,7 +94,15 @@ public class BookManager implements BookOperation {
     public BookManager(UserManager userManager,MemberManager memberManager){
       this.userManager = userManager;
       this.memberManager = memberManager;
+
+              Connection connection =
+        DatabaseConnection.getConnection();
+
+     dao = new BookDAO(connection);
+
     }
+    private BookDAO dao;
+
     BookStorage storage = new BookFileStorage();
     public void loadData(){
       storage.loadBooks(books);
@@ -126,43 +139,24 @@ public class BookManager implements BookOperation {
         bookId = sc.nextLine();
       }
          Book book = new Book(title, author, bookId);
-          books.put(bookId, book);
-          storage.saveBooks(books);
+          dao.addBook(book);
          System.out.println("Book is succesfully added ");        
    }
+  
    public void serachBook(){
-       System.out.println("Enter the title of the book");
-       String title  = sc.nextLine();
-       boolean found = false;
-       for(Book book : books.values()){
-        if (book.getTitle().equals(title)) {
-          found = true;
-          System.out.println(book.getTitle());
-          System.out.println("BY:"+book.getAuthor());
-        }
-       }
-       if (!found) {
-        System.out.println("book not found ");
-       }
-
+       System.out.println("Enter the bookId to serach");
+       String bookId = sc.nextLine();
+       dao.searchBook(bookId);
    }
-   public void displayBook(){
-       if (books.isEmpty()) {
-        System.out.println("There is no Book in system ");
-       }else{
-        for(Book book:books.values()){
+   public void displayBook() {
 
-          System.out.println("-------------------------");
-          System.out.println("Title:"+book.getTitle());
-          System.out.println("Author:"+book.getAuthor());
-          System.out.println("BookId:"+book.getBookId());
-          System.out.println("Available:"+book.getAvailable());
-          System.out.println("BorrowedBy:"+book.getBorrowedby());
-          System.out.println("IssuedBy:"+book.getIssuedby());
-          System.out.println("-------------------------");
-        }
-       }
-   }
+    if(!dao.hasBooks()) {
+        System.out.println("There is no Book in system");
+        return;
+    }
+
+    dao.displayBook();
+}
    public void borrowBook(){
     userManager.getCurrentUser();
     if(userManager.getCurrentUser() == null){

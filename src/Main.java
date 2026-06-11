@@ -1,7 +1,13 @@
 import manager.BookManager;
 import manager.UserManager;
+import model.Book;
 import manager.MemberManager;
+
+import java.sql.Connection;
 import java.util.Scanner;
+
+import database.BookDAO;
+import database.DatabaseConnection;
 
 
 public class Main {
@@ -219,6 +225,6 @@ public class Main {
             case 6:
             return;
     }
-}
     }
+}
 }
