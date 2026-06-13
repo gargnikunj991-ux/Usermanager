@@ -1,13 +1,7 @@
-import manager.BookManager;
-import manager.UserManager;
-import model.Book;
-import manager.MemberManager;
-
-import java.sql.Connection;
 import java.util.Scanner;
-
-import database.BookDAO;
-import database.DatabaseConnection;
+import manager.BookManager;
+import manager.MemberManager;
+import manager.UserManager;
 
 
 public class Main {
@@ -62,18 +56,16 @@ public class Main {
         System.out.println("2: Return Book");
         System.out.println("3: Display Borrow Book");
         System.out.println("4: Display Available Book");
-        System.out.println("5: Back");
+        System.out.println("5: Display Borrowrecords");
+        System.out.println("6: Back");
     }
  
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         UserManager manager = new UserManager();
-        MemberManager memberManager = new MemberManager();
+        MemberManager memberManager = new MemberManager(manager);
 
       BookManager bookManager = new BookManager(manager, memberManager);
-        manager.loadData();
-        memberManager.loadData();
-        bookManager.loadData();
         while(true){
         showMainMenu();
 
@@ -212,8 +204,11 @@ public class Main {
                 break;
                 case 4:
                    bookManager.displayAvailableBook();
-                break;   
+                break;
                 case 5:
+                   bookManager.displayBorrowRecords();
+                break;
+                case 6:
                  library = false;
                  break;
                 default:

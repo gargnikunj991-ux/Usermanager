@@ -1,8 +1,8 @@
 package manager;
-import model.Member;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Scanner;
-import  java.io.*;
+import  model.Member;
 
 
 interface MemberOperation{
@@ -70,7 +70,9 @@ public class MemberManager implements  MemberOperation{
     return members.containsKey(memberId);
 }
 private UserManager userManager;
-
+public MemberManager(UserManager userManager){
+    this.userManager = userManager;
+}
    public void addMember(){
      userManager.getCurrentUser();
     if(userManager.getCurrentUser() == null){
