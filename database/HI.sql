@@ -25,11 +25,3 @@ CREATE TABLE borrow_records(
     borrow_date TIMESTAMP,
     return_date TIMESTAMP
 );
-CREATE TABLE borrow_records(
-    id SERIAL PRIMARY KEY,
-    book_id VARCHAR(50),
-    member_id VARCHAR(50),
-    issued_by VARCHAR(50),
-    borrow_date TIMESTAMP,
-    return_date TIMESTAMP
-);

@@ -11,398 +11,410 @@ public class BookDAO {
 
     private Connection connection;
 
-    public BookDAO(Connection connection){
+    public BookDAO(Connection connection) {
         this.connection = connection;
     }
-  public boolean addBook(Book book){
-    String sql =
-    "INSERT INTO books(book_id,title,author,available) VALUES(?,?,?,?)";
 
-    try {
-        PreparedStatement statement =
-        connection.prepareStatement(sql);
+    public boolean addBook(Book book) {
+        String sql
+                = "INSERT INTO books(book_id,title,author,available) VALUES(?,?,?,?)";
 
-        statement.setString(1, book.getBookId());
-        statement.setString(2, book.getTitle());
-        statement.setString(3, book.getAuthor());
-        statement.setBoolean(4, book.getAvailable());
+        try {
+            PreparedStatement statement
+                    = connection.prepareStatement(sql);
 
-        statement.executeUpdate();
+            statement.setString(1, book.getBookId());
+            statement.setString(2, book.getTitle());
+            statement.setString(3, book.getAuthor());
+            statement.setBoolean(4, book.getAvailable());
 
-        return true;
+            statement.executeUpdate();
 
-    } catch (SQLException e) {
-    
-    }
+            return true;
 
-    return false;
-}
-public boolean hasBooks() {
-    String sql = "SELECT * FROM books";
-
-    try {
-        Statement statement =
-            connection.createStatement();
-
-        ResultSet result =
-            statement.executeQuery(sql);
-
-        return result.next();
-
-    } catch(SQLException e) {
-        e.printStackTrace();
-    }
-
-    return false;
-}
-public void searchBook(String bookId){
-
-    String sql =
-    "SELECT * FROM books WHERE book_id = ?";
-
-    try{
-
-        PreparedStatement statement =
-        connection.prepareStatement(sql);
-
-        statement.setString(1, bookId);
-
-        ResultSet result =
-        statement.executeQuery();
-
-        if(result.next()){
-
-    System.out.println(
-    "Book ID: " +
-    result.getString("book_id")
-);
-
-           System.out.println(
-    "Title: " +
-    result.getString("title")
-);
-
-System.out.println(
-    "Author: " +
-    result.getString("author")
-);
-
-System.out.println(
-    "Available: " +
-    result.getBoolean("available")
-);
-        }else{
-
-            System.out.println(
-                "Book not found"
-            );
+        } catch (SQLException e) {
 
         }
 
-    }catch(SQLException e){
-        e.printStackTrace();
+        return false;
     }
-}
-public void displayBook(){
 
-    String sql = "SELECT * FROM books";
+    public boolean hasBooks() {
+        String sql = "SELECT * FROM books";
 
-    try{
+        try {
+            Statement statement
+                    = connection.createStatement();
 
-        Statement statement =
-        connection.createStatement();
+            ResultSet result
+                    = statement.executeQuery(sql);
 
-        ResultSet result =
-        statement.executeQuery(sql);
+            return result.next();
 
-        while(result.next()){
-
-            System.out.println(
-    "Book ID: " +
-    result.getString("book_id")
-);
-    System.out.println(
-    "Title: " +
-    result.getString("title")
-);
-
-System.out.println(
-    "Author: " +
-    result.getString("author")
-);
-
-      System.out.println(
-     "Available: " +
-     result.getBoolean("available")
-  );
-}
-
-    }catch(SQLException e){
-        e.printStackTrace();
-    }
-}
-public void borrowBook(
-    String bookId,
-    String memberId,
-    String issuedBy
-){
-    try{
-
-        String checkSql =
-        "SELECT available FROM books WHERE book_id = ?";
-
-        PreparedStatement checkStatement =
-        connection.prepareStatement(checkSql);
-
-        checkStatement.setString(1, bookId);
-
-        ResultSet result =
-        checkStatement.executeQuery();
-
-        if(!result.next()){
-            System.out.println("Book not found");
-            return;
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
-        boolean available =
-        result.getBoolean("available");
+        return false;
+    }
 
-        if(!available){
-            System.out.println("Book already borrowed");
-            return;
+    public void searchBook(String bookId) {
+
+        String sql
+                = "SELECT * FROM books WHERE book_id = ?";
+
+        try {
+
+            PreparedStatement statement
+                    = connection.prepareStatement(sql);
+
+            statement.setString(1, bookId);
+
+            ResultSet result
+                    = statement.executeQuery();
+
+            if (result.next()) {
+
+                System.out.println(
+                        "Book ID: "
+                        + result.getString("book_id")
+                );
+
+                System.out.println(
+                        "Title: "
+                        + result.getString("title")
+                );
+
+                System.out.println(
+                        "Author: "
+                        + result.getString("author")
+                );
+
+                System.out.println(
+                        "Available: "
+                        + result.getBoolean("available")
+                );
+            } else {
+
+                System.out.println(
+                        "Book not found"
+                );
+
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void displayBook() {
+
+        String sql = "SELECT * FROM books";
+
+        try {
+
+            Statement statement
+                    = connection.createStatement();
+
+            ResultSet result
+                    = statement.executeQuery(sql);
+
+            while (result.next()) {
+
+                System.out.println(
+                        "Book ID: "
+                        + result.getString("book_id")
+                );
+                System.out.println(
+                        "Title: "
+                        + result.getString("title")
+                );
+
+                System.out.println(
+                        "Author: "
+                        + result.getString("author")
+                );
+
+                System.out.println(
+                        "Available: "
+                        + result.getBoolean("available")
+                );
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void borrowBook(
+            String bookId,
+            String memberId,
+            String issuedBy
+    ) {
+        try {
+
+            String checkSql
+                    = "SELECT available FROM books WHERE book_id = ?";
+
+            PreparedStatement checkStatement
+                    = connection.prepareStatement(checkSql);
+
+            checkStatement.setString(1, bookId);
+
+            ResultSet result
+                    = checkStatement.executeQuery();
+
+            if (!result.next()) {
+                System.out.println("Book not found");
+                return;
+            }
+
+            boolean available
+                    = result.getBoolean("available");
+
+            if (!available) {
+                System.out.println("Book already borrowed");
+                return;
+            }
+
+            String updateSql
+                    = "UPDATE books SET available = false WHERE book_id = ?";
+
+            PreparedStatement updateStatement
+                    = connection.prepareStatement(updateSql);
+
+            updateStatement.setString(1, bookId);
+
+            updateStatement.executeUpdate();
+
+            System.out.println("Book borrowed successfully");
+            String recordSql
+                    = "INSERT INTO borrow_records(book_id, member_id, issued_by, borrow_date) VALUES(?,?,?,NOW())";
+
+            PreparedStatement recordStatement
+                    = connection.prepareStatement(recordSql);
+
+            recordStatement.setString(1, bookId);
+            recordStatement.setString(2, memberId);
+            recordStatement.setString(3, issuedBy);
+
+            recordStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean bookExists(String bookId) {
+
+        String sql
+                = "SELECT * FROM books WHERE book_id = ?";
+
+        try {
+
+            PreparedStatement statement
+                    = connection.prepareStatement(sql);
+
+            statement.setString(1, bookId);
+
+            ResultSet result
+                    = statement.executeQuery();
+
+            return result.next();
+
+        } catch (SQLException e) {
+
         }
 
-        String updateSql =
-        "UPDATE books SET available = false WHERE book_id = ?";
-
-        PreparedStatement updateStatement =
-        connection.prepareStatement(updateSql);
-
-        updateStatement.setString(1, bookId);
-
-        updateStatement.executeUpdate();
-
-        System.out.println("Book borrowed successfully");
-        String recordSql =
-"INSERT INTO borrow_records(book_id, member_id, issued_by, borrow_date) VALUES(?,?,?,NOW())";
-
-       PreparedStatement recordStatement =
-connection.prepareStatement(recordSql);
-
-recordStatement.setString(1, bookId);
-recordStatement.setString(2, memberId);
-recordStatement.setString(3, issuedBy);
-
-recordStatement.executeUpdate();
-
-    }catch(SQLException e){
-        e.printStackTrace();
-    }
-}
-public boolean bookExists(String bookId){
-
-    String sql =
-    "SELECT * FROM books WHERE book_id = ?";
-
-    try{
-
-        PreparedStatement statement =
-        connection.prepareStatement(sql);
-
-        statement.setString(1, bookId);
-
-        ResultSet result =
-        statement.executeQuery();
-
-        return result.next();
-
-    }catch(SQLException e){
-
+        return false;
     }
 
-    return false;
-}
-public void returnBook(String bookId){
+    public void returnBook(String bookId) {
 
-    try{
+        try {
 
-        String checkSql =
-        "SELECT available FROM books WHERE book_id = ?";
+            String checkSql
+                    = "SELECT available FROM books WHERE book_id = ?";
 
-        PreparedStatement checkStatement =
-        connection.prepareStatement(checkSql);
+            PreparedStatement checkStatement
+                    = connection.prepareStatement(checkSql);
 
-        checkStatement.setString(1, bookId);
+            checkStatement.setString(1, bookId);
 
-        ResultSet result =
-        checkStatement.executeQuery();
+            ResultSet result
+                    = checkStatement.executeQuery();
 
-        if(!result.next()){
-            System.out.println("Book not found");
-            return;
+            if (!result.next()) {
+                System.out.println("Book not found");
+                return;
+            }
+
+            boolean available
+                    = result.getBoolean("available");
+
+            if (available) {
+                System.out.println("Book was never borrowed");
+                return;
+            }
+
+            String updateBookSql
+                    = "UPDATE books SET available = true WHERE book_id = ?";
+
+            PreparedStatement updateBook
+                    = connection.prepareStatement(updateBookSql);
+
+            updateBook.setString(1, bookId);
+
+            updateBook.executeUpdate();
+
+            String updateRecordSql
+                    = "UPDATE borrow_records "
+                    + "SET return_date = NOW() "
+                    + "WHERE book_id = ? AND return_date IS NULL";
+
+            PreparedStatement updateRecord
+                    = connection.prepareStatement(updateRecordSql);
+
+            updateRecord.setString(1, bookId);
+
+            updateRecord.executeUpdate();
+
+            System.out.println("Book returned successfully");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+    }
 
-        boolean available =
-        result.getBoolean("available");
+    public void displayBorrowBook() {
 
-        if(available){
-            System.out.println("Book was never borrowed");
-            return;
+        String sql = "SELECT * FROM books WHERE available = false";
+        try {
+
+            Statement statement
+                    = connection.createStatement();
+
+            ResultSet result
+                    = statement.executeQuery(sql);
+
+            while (result.next()) {
+                System.out.println(
+                        "Book ID: "
+                        + result.getString("book_id")
+                );
+                System.out.println(
+                        "Title: "
+                        + result.getString("title")
+                );
+
+                System.out.println(
+                        "Author: "
+                        + result.getString("author")
+                );
+
+                System.out.println(
+                        "Available: "
+                        + result.getBoolean("available")
+                );
+
+                System.out.println("----------------");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-
-        String updateBookSql =
-        "UPDATE books SET available = true WHERE book_id = ?";
-
-        PreparedStatement updateBook =
-        connection.prepareStatement(updateBookSql);
-
-        updateBook.setString(1, bookId);
-
-        updateBook.executeUpdate();
-
-        String updateRecordSql =
-        "UPDATE borrow_records " +
-        "SET return_date = NOW() " +
-        "WHERE book_id = ? AND return_date IS NULL";
-
-        PreparedStatement updateRecord =
-        connection.prepareStatement(updateRecordSql);
-
-        updateRecord.setString(1, bookId);
-
-        updateRecord.executeUpdate();
-
-        System.out.println("Book returned successfully");
-
-    }catch(SQLException e){
-        e.printStackTrace();
     }
-}public void displayBorrowBook(){
 
-    String sql = "SELECT * FROM books WHERE available = false";
-    try{
+    public void displayAvailableBook() {
 
-        Statement statement =
-        connection.createStatement();
+        String sql = "SELECT * FROM books WHERE available = true";
 
-        ResultSet result =
-        statement.executeQuery(sql);
+        try {
 
-        while(result.next()){
-System.out.println(
-    "Book ID: " +
-    result.getString("book_id")
-);
-            System.out.println(
-    "Title: " +
-    result.getString("title")
-);
+            Statement statement
+                    = connection.createStatement();
 
-System.out.println(
-    "Author: " +
-    result.getString("author")
-);
+            ResultSet result
+                    = statement.executeQuery(sql);
 
-System.out.println(
-    "Available: " +
-    result.getBoolean("available")
-);
+            while (result.next()) {
 
-            System.out.println("----------------");
+                System.out.println(
+                        "Book ID: "
+                        + result.getString("book_id")
+                );
+
+                System.out.println(
+                        "Title: "
+                        + result.getString("title")
+                );
+
+                System.out.println(
+                        "Author: "
+                        + result.getString("author")
+                );
+
+                System.out.println(
+                        "Available: "
+                        + result.getBoolean("available")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-
-    }catch(SQLException e){
-        e.printStackTrace();
     }
-} 
-public void displayAvailableBook(){
 
-    String sql = "SELECT * FROM books WHERE available = true";
+    public void displayBorrowRecords() {
 
-    try{
+        String sql
+                = "SELECT * FROM borrow_records";
 
-        Statement statement =
-        connection.createStatement();
+        try {
 
-        ResultSet result =
-        statement.executeQuery(sql);
+            Statement statement
+                    = connection.createStatement();
 
-        while(result.next()){
+            ResultSet result
+                    = statement.executeQuery(sql);
 
-            System.out.println(
-    "Book ID: " +
-    result.getString("book_id")
-);
+            while (result.next()) {
 
-System.out.println(
-    "Title: " +
-    result.getString("title")
-);
+                System.out.println(
+                        "Record ID: "
+                        + result.getInt("id")
+                );
 
-System.out.println(
-    "Author: " +
-    result.getString("author")
-);
+                System.out.println(
+                        "Book ID: "
+                        + result.getString("book_id")
+                );
 
-System.out.println(
-    "Available: " +
-    result.getBoolean("available")
-);}
-    }catch(SQLException e){
-        e.printStackTrace();
-    }
-}
-public void displayBorrowRecords(){
+                System.out.println(
+                        "Member ID: "
+                        + result.getString("member_id")
+                );
 
-    String sql =
-    "SELECT * FROM borrow_records";
+                System.out.println(
+                        "Issued By: "
+                        + result.getString("issued_by")
+                );
 
-    try{
+                System.out.println(
+                        "Borrow Date: "
+                        + result.getTimestamp("borrow_date")
+                );
 
-        Statement statement =
-        connection.createStatement();
+                System.out.println(
+                        "Return Date: "
+                        + result.getTimestamp("return_date")
+                );
 
-        ResultSet result =
-        statement.executeQuery(sql);
+                System.out.println("----------------");
+            }
 
-        while(result.next()){
-
-            System.out.println(
-                "Record ID: " +
-                result.getInt("id")
-            );
-
-            System.out.println(
-                "Book ID: " +
-                result.getString("book_id")
-            );
-
-            System.out.println(
-                "Member ID: " +
-                result.getString("member_id")
-            );
-
-            System.out.println(
-                "Issued By: " +
-                result.getString("issued_by")
-            );
-
-            System.out.println(
-                "Borrow Date: " +
-                result.getTimestamp("borrow_date")
-            );
-
-            System.out.println(
-                "Return Date: " +
-                result.getTimestamp("return_date")
-            );
-
-            System.out.println("----------------");
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-
-    }catch(SQLException e){
-        e.printStackTrace();
     }
-} 
 
 }
