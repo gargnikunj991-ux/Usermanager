@@ -2,6 +2,7 @@ package manager;
 
 import database.BookDAO;
 import database.DatabaseConnection;
+import database.MemberDAO;
 import java.sql.Connection;
 import java.util.Scanner;
 import model.Book;
@@ -37,9 +38,11 @@ public class BookManager implements BookOperation {
                 = DatabaseConnection.getConnection();
 
         dao = new BookDAO(connection);
+        Dao = new MemberDAO(connection);
 
     }
     private BookDAO dao;
+    private  MemberDAO Dao;
 
     public void addBook() {
         userManager.getCurrentUser();
@@ -104,7 +107,7 @@ public class BookManager implements BookOperation {
         }
         System.out.println("Enter memberId");
         String memberId = sc.nextLine();
-        if (!memberManager.memberExists(memberId)) {
+        if (!Dao.memberExists(memberId)) {
             System.out.println("Member does not exist");
             return;
         }

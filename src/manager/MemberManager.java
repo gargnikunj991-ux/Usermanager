@@ -3,7 +3,6 @@ package manager;
 import database.DatabaseConnection;
 import database.MemberDAO;
 import java.sql.Connection;
-import java.util.HashMap;
 import java.util.Scanner;
 import model.Member;
 
@@ -16,20 +15,12 @@ interface MemberOperation {
     void displayMember();
 }
 
-interface MemberStorage {
 
-    void saveMember(HashMap<String, Member> members);
-
-    void loadMember(HashMap<String, Member> members);
-}
 public class MemberManager implements MemberOperation {
 
-    HashMap<String, Member> members = new HashMap<>();
     Scanner sc = new Scanner(System.in);
 
-    public boolean memberExists(String memberId) {
-        return members.containsKey(memberId);
-    }
+    
     private UserManager userManager;
 
     public MemberManager(UserManager userManager) {

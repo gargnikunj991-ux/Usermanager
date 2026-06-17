@@ -118,13 +118,13 @@ public class Main {
                         manager.displayUser();
                         break;
                     case 4:
-                        manager.updateUser();
+            //            manager.updateUser();
                         break;
                     case 5:
-                        manager.changeUsername();
+          //              manager.changeUsername();
                         break;
                     case 6:
-                        manager.deleteUser();
+        //                manager.deleteUser();
                         break;
                     case 7:
                         employ = false;

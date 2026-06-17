@@ -1,3 +1,0 @@
-fun,nikunj,B3,false,A3,nikunj
-fury,nikunj,B4,true,null,null
-java,nikunj,B1,false,A1,nikunj

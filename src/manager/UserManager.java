@@ -1,87 +1,31 @@
 package manager;
-import model.User;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.HashMap;
+import database.DatabaseConnection;
+import database.UserDAO;
+import java.sql.Connection;
 import java.util.Scanner;
-
-interface UserStorage {
-
-    void saveUsers(HashMap<String, User> users);
-
-    void loadUsers(HashMap<String, User> users);
-}
-
-class FileStorage implements UserStorage {
-
-    public void saveUsers(HashMap<String, User> users) {
-        try {
-            FileWriter writer = new FileWriter("user.txt");
-            for (User user : users.values()) {
-                writer.write(user.getName() + "," + user.getAge() + "," + user.getEmail() + "," + user.getPassword());
-                writer.write("\n");
-            }
-            writer.close();
-        } catch (IOException e) {
-            System.out.println("File cannot update");
-        }
-
-    }
-
-    public void loadUsers(HashMap<String, User> users) {
-        try {
-            File file = new File("user.txt");
-
-            if (!file.exists()) {
-
-                return;
-            }
-            BufferedReader reader
-                    = new BufferedReader(new FileReader("user.txt"));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] data = line.split(",");
-                String name = data[0].trim();
-                int age = Integer.parseInt(data[1].trim());
-                String email = data[2].trim();
-                String password = data[3].trim();
-                User u1 = new User(name, age, email, password);
-                users.put(name, u1);
-            }
-
-            reader.close();
-        } catch (IOException e) {
-            System.out.println("error");
-        }
-
-    }
-
-}
-
+import model.User;
+   
 interface UserOperation {
 
     void addUser();
 
-    void deleteUser();
+    void searchUser();
 
     void displayUser();
 
-    void updateUser();
+  /*   void updateUser();
 
-    void searchUser();
+    void deleteUser();    
+
+ 
 
     void changeUsername();
-
+*/
 }
 
 public class UserManager implements UserOperation {
 
-    HashMap<String, User> users = new HashMap<>();
     Scanner sc = new Scanner(System.in);
-    UserStorage storage = new FileStorage();
     private User currentUser;
     public User getCurrentUser(){
         return currentUser;
@@ -89,10 +33,17 @@ public class UserManager implements UserOperation {
     public boolean userExistsPublic(String name) {
     return userExists(name);
 }
+    public UserManager(){
+        Connection connection
+                = DatabaseConnection.getConnection();
+
+        dao = new UserDAO(connection);
+    }
+    private UserDAO dao;
 
     private boolean userExists(String name) {
 
-        return users.containsKey(name);
+        return dao.existUser(name);
     }
 
     private boolean isValidEmail(String email) {
@@ -102,7 +53,7 @@ public class UserManager implements UserOperation {
 
     private boolean isValidAge(int age) {
 
-        return age > 15;
+        return age > 17;
     }
 
     private boolean isWeakPassword(String password) {
@@ -118,29 +69,36 @@ public class UserManager implements UserOperation {
       }
      }
 
-    public void loadData() {
-        storage.loadUsers(users);
-    }
+   
 
     public void login() {
         if (currentUser ==null) {
-            System.out.println("Enter username ");
-            String username = sc.nextLine();
-            if (userExists(username)) {
-                System.out.println("Enter password");
-                String password = sc.nextLine();
-                User user = users.get(username);
-                if (user.getPassword().equals(password)) {
-                    currentUser = user;
-                    System.out.println("Welcome " + currentUser.getName());
-                    System.out.println("login successful");
-                } else {
-                    System.out.println("Wrong password");
-                }
-            } else {
-                System.out.println("User not found ");
-                return;
-            }
+           System.out.println("Enter username");
+           String username = sc.nextLine();
+
+          System.out.println("Enter password");
+          String password = sc.nextLine();
+
+         User user = dao.loginUser(username, password);
+
+            if(user != null) {
+
+            currentUser = user;
+
+            System.out.println(
+            "Welcome " + currentUser.getName()
+            );
+
+            System.out.println(
+            "Login successful"
+            );
+
+        } else {
+
+      System.out.println(
+        "Wrong username or password"
+      );
+    }
         } else {
             System.out.println(currentUser.getName() + " is already loggin");
         }
@@ -150,8 +108,8 @@ public class UserManager implements UserOperation {
         if (!isLoggedIn()) {
             System.out.println("No user is logged in");
         } else {
+            System.out.println(currentUser.getName()+" is logout");
             currentUser = null;
-            System.out.println("User is logout");
         }
 
     }
@@ -199,42 +157,36 @@ public class UserManager implements UserOperation {
                 password = sc.nextLine();
             }
             User u1 = new User(name, age, email, password);
-            users.put(name, u1);
-            storage.saveUsers(users);
-            System.out.println("User is resgister");
+            if (dao.addUser(u1)) {
+            System.out.println("User is resgister");    
+            }else{
+                System.out.println("User not resgister");
+            }
+            
         }
     }
 
     public void searchUser() {
         if (!isLoggedIn()) {
             return;
-        }else{
+        }
         System.out.println("Enter username to serach");
         String serach = sc.nextLine();
+        dao.searchUser(serach);
 
-        if (users.containsKey(serach)) {
-            User user = users.get(serach);
-            System.out.println("user is found ");
-            System.out.println(user);
-        } else {
-            System.out.println("User not found ");
-        }
-    }
+       
+
 }
 
     public void displayUser() {
-        if (users.isEmpty()) {
-            System.out.println("No user available");
-        } else {
-            for (User user : users.values()) {
-                System.out.println("Name: " + user.getName());
-                System.out.println("Age: " + user.getAge());
-                System.out.println("Email: " + user.getEmail());
-            }
+        if(!dao.hasUser()){
+            System.out.println("There is no User in the system");
+            return;
         }
+        dao.displayUser();
     }
 
-    public void deleteUser() {
+ /*    public void deleteUser() {
         if (!isLoggedIn()) {
             return;
         } else {
@@ -298,5 +250,5 @@ public class UserManager implements UserOperation {
             }
         }
     }
-}
+        */
 }
