@@ -183,4 +183,91 @@ public class UserDAO {
     return null;
 }
 
+       public boolean verifyPassword(String username, String password) {
+        String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
+
+        try {
+            PreparedStatement statement =
+        connection.prepareStatement(sql);
+
+        statement.setString(1, username);
+        statement.setString(2, password);
+
+        ResultSet result =
+        statement.executeQuery();
+
+        return result.next();   
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return true;
+    }
+    public void deleteUser(String username){
+    
+        String sql ="DELETE FROM users WHERE username =?";
+
+        try {
+            PreparedStatement statement =
+            connection.prepareStatement(sql);
+
+            statement.setString(1, username);
+            
+           statement.executeUpdate();
+        } catch (SQLException e) {
+           e.printStackTrace();
+        }
+
+    }
+    public void updateUser(
+    String username,
+    String email,
+    int age
+){
+
+    String sql =
+    "UPDATE users SET email = ?, age = ? WHERE username = ?";
+
+    try{
+
+        PreparedStatement statement =
+        connection.prepareStatement(sql);
+
+        statement.setString(1, email);
+        statement.setInt(2, age);
+        statement.setString(3, username);
+
+        statement.executeUpdate();
+
+        System.out.println("User updated successfully");
+
+    }catch(SQLException e){
+        e.printStackTrace();
+    }
+}
+    public void changePassword(
+    String username,
+    String newPassword
+){
+
+    String sql =
+    "UPDATE users SET password = ? WHERE username = ?";
+
+    try{
+
+        PreparedStatement statement =
+        connection.prepareStatement(sql);
+
+        statement.setString(1, newPassword);
+        statement.setString(2, username);
+
+        statement.executeUpdate();
+
+        System.out.println("Password changed successfully");
+
+    }catch(SQLException e){
+        e.printStackTrace();
+    }
+} 
+
 }

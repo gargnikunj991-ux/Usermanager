@@ -29,7 +29,7 @@ public class Main {
        System.out.println("2: Search user");
        System.out.println("3: Display user");
        System.out.println("4: Update user");
-       System.out.println("5: Change username");
+       System.out.println("5: Change password");
        System.out.println("6: Delete user");
        System.out.println("7: Back");
     }
@@ -118,13 +118,13 @@ public class Main {
                         manager.displayUser();
                         break;
                     case 4:
-            //            manager.updateUser();
+                        manager.updateUser();
                         break;
                     case 5:
-          //              manager.changeUsername();
+                       manager.changePassword();
                         break;
                     case 6:
-        //                manager.deleteUser();
+                        manager.deleteUser();
                         break;
                     case 7:
                         employ = false;

@@ -186,69 +186,75 @@ public class UserManager implements UserOperation {
         dao.displayUser();
     }
 
- /*    public void deleteUser() {
+     public void deleteUser() {
         if (!isLoggedIn()) {
             return;
-        } else {
-            if (users.containsKey(currentUser.getName())) {
-                users.remove(currentUser.getName());
-                storage.saveUsers(users);
-                currentUser = null;
-                System.out.println("Account is deleted");
-            } else {
-                System.out.println("User not found ");
-            }
+        } 
+        System.out.println("Enter the password of the user");
+        String password =sc.nextLine();
+        if (dao.verifyPassword(currentUser.getName(), password)) {
+            dao.deleteUser(currentUser.getName());
+            currentUser = null;
+            System.out.println(" Account is deleted");
+            return;
         }
+        System.out.println("Wrong password");
+        
     }
 
-    public void updateUser() {
+     public void updateUser() {
       if(!isLoggedIn()) {
-      }else{
-        if (users.containsKey(currentUser.getName())) {
-            System.out.println("Enter your email ");
-            String newemail = sc.nextLine();
-            while (!isValidEmail(newemail)) {
-                System.out.println("Invalid email");
-                System.out.println("Reenter the email");
-                newemail = sc.nextLine();
-            }
-            User user = users.get(currentUser.getName());
-            user.setEmail(newemail);
-            System.out.println("Enter your age");
-            int newage = sc.nextInt();
+        return;
+      }
+      System.out.println("Enter the password of the user");
+      String password = sc.nextLine();
+      if (dao.verifyPassword(currentUser.getName(), password)) {
+          System.out.println("Enter the new email");
+          String newEmail =sc.nextLine();
+          while (!isValidEmail(newEmail)) {
+            System.out.println("Email is wrong re enter it ");
+            newEmail =sc.nextLine();
+          }
+          System.out.println("Enter the new age ");
+          int newAge = sc.nextInt();
+          sc.nextLine();  
+          while (!isValidAge(newAge)) {
+            System.out.println("Age is wrong");
+            newAge = sc.nextInt();
             sc.nextLine();
-            while (!isValidAge(newage)) {
-                System.out.println("Age  is invalid");
-                System.out.println("Enter age");
-                newage = sc.nextInt();
-                sc.nextLine();
-            }
-            user.setAge(newage);
-            storage.saveUsers(users);
-            System.out.println("email and age is updated ");
-        } else {
-            System.out.println("User is not found ");
-        }
+          }
+
+          dao.updateUser(
+          currentUser.getName(),
+            newEmail,
+             newAge 
+            );
+        
+      }else{
+        System.out.println("Password is wrong");
+      }
+    
     }
-    }
-    public void changeUsername() {
+    
+     public void changePassword() {
         if (!isLoggedIn()) {
             return;
-        }else{
-        if (userExists(currentUser.getName())) {
-            System.out.println("Enter the new username");
-            String newusername = sc.nextLine();
-            if (userExists(newusername)) {
-                System.out.println("Username already exist ");
-            } else {
-                User user = users.remove(currentUser.getName());
-                user.setName(newusername);
-                currentUser = user;
-                users.put(newusername, user);
-                System.out.println("Username is updated");
-                storage.saveUsers(users);
+        }  
+        System.out.println("Enter the old password");
+        String password =sc.nextLine();
+        if (dao.verifyPassword(currentUser.getName(), password)) {
+            System.out.println("Enter the new password");
+            String newPassword = sc.nextLine();
+            while (isWeakPassword(newPassword)) {
+                System.out.println("Password is to short");
+                newPassword = sc.nextLine();
             }
+            dao.changePassword(
+            currentUser.getName(),
+            newPassword
+             );
+        }else{
+            System.out.println("Password is wrong");
         }
+     }
     }
-        */
-}
